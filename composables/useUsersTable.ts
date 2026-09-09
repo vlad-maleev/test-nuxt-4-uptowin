@@ -44,11 +44,19 @@ export function useUsersTable(users: readonly User[]) {
   const page = ref(1)
   const perPage = ref<PageSize>(10)
 
-  // TODO:
-  // - paginatedUsers
-  // - totalPages
-  const paginatedUsers = computed<User[]>(() => [])
-  const totalPages = computed(() => 1)
+  const totalPages = computed(() =>
+    Math.max(1, Math.ceil(sortedUsers.value.length / perPage.value))
+  )
+
+  const paginatedUsers = computed(() => {
+    const start = (page.value - 1) * perPage.value
+
+    return sortedUsers.value.slice(start, start + perPage.value)
+  })
+
+  watch([search, role, perPage], () => {
+    page.value = 1
+  })
 
   return {
     search,
