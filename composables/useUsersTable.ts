@@ -1,9 +1,23 @@
 import type { PageSize, SortDirection, User, UserRole, UserSortField } from '~/types/user'
 
-export function useUsersTable(_users: readonly User[]) {
+export function useUsersTable(users: readonly User[]) {
   // filters
   const search = ref('')
   const role = ref<UserRole | null>(null)
+
+  const filteredUsers = computed(() => {
+    const searchQuery = search.value.trim().toLowerCase()
+
+    return users.filter((user) => {
+      const matchesRole = role.value === null || user.role === role.value
+      const matchesSearch =
+        searchQuery === '' ||
+        user.name.toLowerCase().includes(searchQuery) ||
+        user.email.toLowerCase().includes(searchQuery)
+
+      return matchesRole && matchesSearch
+    })
+  })
 
   // sorting
   const sortBy = ref<UserSortField | null>(null)
@@ -14,7 +28,6 @@ export function useUsersTable(_users: readonly User[]) {
   const perPage = ref<PageSize>(10)
 
   // TODO:
-  // - filteredUsers
   // - sortedUsers
   // - paginatedUsers
   // - totalPages
@@ -29,6 +42,7 @@ export function useUsersTable(_users: readonly User[]) {
     page,
     perPage,
 
+    filteredUsers,
     paginatedUsers,
     totalPages
   }

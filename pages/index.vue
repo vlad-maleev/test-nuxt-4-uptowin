@@ -2,7 +2,7 @@
   <div>
     <UserFilters v-model:search="search" v-model:role="role" v-model:per-page="perPage" />
 
-    <UserTable :users="paginatedUsers" @sort="onSort" />
+    <UserTable :users="filteredUsers" @sort="onSort" />
 
     <div class="pagination">
       <button :disabled="page === 1" @click="page--">Prev</button>
@@ -19,7 +19,7 @@ import { users } from '~/data/users'
 import { useUsersTable } from '~/composables/useUsersTable'
 import type { UserSortField } from '~/types/user'
 
-const { search, role, sortBy, sortDirection, page, perPage, paginatedUsers, totalPages } =
+const { search, role, sortBy, sortDirection, page, perPage, filteredUsers, totalPages } =
   useUsersTable(users)
 
 function onSort(field: UserSortField) {
