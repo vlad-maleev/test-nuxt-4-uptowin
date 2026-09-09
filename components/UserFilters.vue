@@ -2,20 +2,20 @@
   <div class="filters">
     <input
       :value="search"
-      @input="$emit('update:search', $event.target.value)"
       placeholder="Search by name or email"
+      @input="$emit('update:search', $event.target.value)"
     />
 
     <BaseSelect
       :model-value="role"
-      @update:model-value="$emit('update:role', $event)"
       :options="['admin', 'manager', 'user']"
+      @update:model-value="$emit('update:role', $event)"
     />
 
     <BaseSelect
       :model-value="perPage"
-      @update:model-value="$emit('update:perPage', Number($event))"
       :options="[10, 15, 20]"
+      @update:model-value="$emit('update:perPage', Number($event))"
     />
   </div>
 </template>
@@ -24,14 +24,10 @@
 defineProps({
   search: String,
   role: String,
-  perPage: Number,
+  perPage: Number
 })
 
-defineEmits([
-  'update:search',
-  'update:role',
-  'update:perPage',
-])
+defineEmits(['update:search', 'update:role', 'update:perPage'])
 </script>
 
 <style scoped>

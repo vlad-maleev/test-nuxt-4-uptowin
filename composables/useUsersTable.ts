@@ -1,4 +1,4 @@
-export function useUsersTable(users) {
+export function useUsersTable(_users: unknown[]) {
   // filters
   const search = ref('')
   const role = ref(null)
@@ -28,6 +28,6 @@ export function useUsersTable(users) {
     perPage,
 
     paginatedUsers,
-    totalPages,
+    totalPages
   }
 }

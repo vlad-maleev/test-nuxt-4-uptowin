@@ -1,14 +1,7 @@
 <template>
-  <select
-    v-model="model"
-    class="select"
-  >
+  <select v-model="model" class="select">
     <option :value="null">All</option>
-    <option
-      v-for="option in options"
-      :key="option"
-      :value="option"
-    >
+    <option v-for="option in options" :key="option" :value="option">
       {{ option }}
     </option>
   </select>
@@ -18,11 +11,14 @@
 defineProps({
   options: {
     type: Array,
-    required: true,
-  },
+    required: true
+  }
 })
 
-const model = defineModel()
+const model = defineModel({
+  type: [String, Number],
+  default: null
+})
 </script>
 
 <style scoped>

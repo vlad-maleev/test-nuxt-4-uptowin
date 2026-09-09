@@ -1,7 +1,15 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  compatibilityDate: '2025-07-15',
-  css: ['~/assets/css/main.css'],
+  modules: ['@nuxt/eslint', '@nuxt/ui'],
   devtools: { enabled: true },
-  modules: ['@nuxt/ui']
+  css: ['~/assets/css/main.css'],
+  compatibilityDate: '2025-07-15',
+  eslint: {
+    config: {
+      stylistic: {
+        commaDangle: 'never',
+        braceStyle: '1tbs'
+      }
+    }
+  }
 })
