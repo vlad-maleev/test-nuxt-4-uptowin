@@ -1,13 +1,6 @@
 <template>
   <div>
-    <UserFilters
-      :search="search"
-      :role="role"
-      :per-page="perPage"
-      @update:search="search = $event"
-      @update:role="role = $event"
-      @update:per-page="perPage = $event"
-    />
+    <UserFilters v-model:search="search" v-model:role="role" v-model:per-page="perPage" />
 
     <UserTable :users="paginatedUsers" @sort="onSort" />
 
@@ -21,14 +14,15 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { users } from '~/data/users'
 import { useUsersTable } from '~/composables/useUsersTable'
+import type { UserSortField } from '~/types/user'
 
 const { search, role, sortBy, sortDirection, page, perPage, paginatedUsers, totalPages } =
   useUsersTable(users)
 
-function onSort(field) {
+function onSort(field: UserSortField) {
   if (sortBy.value === field) {
     sortDirection.value = sortDirection.value === 'asc' ? 'desc' : 'asc'
   } else {

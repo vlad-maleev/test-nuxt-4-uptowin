@@ -29,15 +29,16 @@
   </div>
 </template>
 
-<script setup>
-defineProps({
-  users: {
-    type: Array,
-    required: true
-  }
-})
+<script setup lang="ts">
+import type { User, UserSortField } from '~/types/user'
 
-defineEmits(['sort'])
+defineProps<{
+  users: readonly User[]
+}>()
+
+defineEmits<{
+  sort: [field: UserSortField]
+}>()
 </script>
 
 <style scoped>
