@@ -23,12 +23,28 @@ export function useUsersTable(users: readonly User[]) {
   const sortBy = ref<UserSortField | null>(null)
   const sortDirection = ref<SortDirection>('asc')
 
+  const sortedUsers = computed(() => {
+    if (sortBy.value === null) {
+      return filteredUsers.value
+    }
+
+    const direction = sortDirection.value === 'asc' ? 1 : -1
+
+    return [...filteredUsers.value].sort((firstUser, secondUser) => {
+      const comparison =
+        sortBy.value === 'age'
+          ? firstUser.age - secondUser.age
+          : Date.parse(firstUser.createdAt) - Date.parse(secondUser.createdAt)
+
+      return comparison === 0 ? firstUser.id - secondUser.id : comparison * direction
+    })
+  })
+
   // pagination
   const page = ref(1)
   const perPage = ref<PageSize>(10)
 
   // TODO:
-  // - sortedUsers
   // - paginatedUsers
   // - totalPages
   const paginatedUsers = computed<User[]>(() => [])
@@ -43,6 +59,7 @@ export function useUsersTable(users: readonly User[]) {
     perPage,
 
     filteredUsers,
+    sortedUsers,
     paginatedUsers,
     totalPages
   }
