@@ -1,2 +1,9 @@
 @import 'tailwindcss';
-@import '@nuxt/ui';
+
+@layer base {
+  body {
+    min-width: 320px;
+    background: #f8fafc;
+    color: #0f172a;
+  }
+}

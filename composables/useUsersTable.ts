@@ -1,4 +1,4 @@
-import type { SortDirection, UsersTableState, User, UserRole, UserSortField } from '~/types/user'
+import type { UsersTableState, User, UserRole, UserSortField } from '~/types/user'
 import { parseUsersTableQuery, serializeUsersTableQuery } from '~/utils/usersTableQuery'
 
 export function useUsersTable(users: readonly User[]) {
@@ -77,10 +77,17 @@ export function useUsersTable(users: readonly User[]) {
   })
 
   function toggleSort(field: UserSortField) {
-    const direction: SortDirection =
-      sortBy.value === field && sortDirection.value === 'asc' ? 'desc' : 'asc'
+    if (sortBy.value !== field) {
+      updateQuery({ sortBy: field, sortDirection: 'asc', page: 1 })
+      return
+    }
 
-    updateQuery({ sortBy: field, sortDirection: direction, page: 1 })
+    if (sortDirection.value === 'asc') {
+      updateQuery({ sortDirection: 'desc', page: 1 })
+      return
+    }
+
+    updateQuery({ sortBy: null, sortDirection: 'asc', page: 1 })
   }
 
   // pagination

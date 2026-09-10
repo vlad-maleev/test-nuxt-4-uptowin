@@ -1,25 +1,38 @@
 <template>
-  <div class="filters">
-    <input v-model="search" placeholder="Search by name or email" />
+  <div class="grid gap-4 md:grid-cols-[minmax(0,1fr)_180px_140px]">
+    <label class="block">
+      <span class="mb-2 block text-sm font-medium text-slate-700">Search users</span>
+      <div class="relative">
+        <Search
+          class="absolute top-1/2 left-3 size-5 -translate-y-1/2 text-slate-400"
+          aria-hidden="true"
+        />
+        <input
+          v-model="search"
+          type="search"
+          placeholder="Name or email"
+          class="h-11 w-full rounded-lg border border-slate-300 bg-white pr-3 pl-10 text-sm outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:ring-3 focus:ring-emerald-100"
+        />
+      </div>
+    </label>
 
-    <BaseSelect v-model="role" :options="USER_ROLES" show-all />
+    <label class="block">
+      <span class="mb-2 block text-sm font-medium text-slate-700">Role</span>
+      <BaseSelect v-model="role" :options="USER_ROLES" show-all all-label="All roles" />
+    </label>
 
-    <BaseSelect v-model="perPage" :options="PAGE_SIZES" />
+    <label class="block">
+      <span class="mb-2 block text-sm font-medium text-slate-700">Rows per page</span>
+      <BaseSelect v-model="perPage" :options="PAGE_SIZES" />
+    </label>
   </div>
 </template>
 
 <script setup lang="ts">
+import { Search } from '@lucide/vue'
 import { PAGE_SIZES, USER_ROLES, type PageSize, type UserRole } from '~/types/user'
 
 const search = defineModel<string>('search', { required: true })
 const role = defineModel<UserRole | null>('role', { required: true })
 const perPage = defineModel<PageSize>('perPage', { required: true })
 </script>
-
-<style scoped>
-.filters {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 12px;
-}
-</style>
