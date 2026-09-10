@@ -18,10 +18,8 @@ export function useUsersTable(users: readonly User[]) {
   }
 
   // filters
-  const search = computed({
-    get: () => queryState.value.search,
-    set: (value: string) => updateQuery({ search: value, page: 1 }, true)
-  })
+  const search = ref(queryState.value.search)
+  const debouncedSearch = useDebounce(search)
 
   const role = computed({
     get: () => queryState.value.role,
@@ -29,7 +27,7 @@ export function useUsersTable(users: readonly User[]) {
   })
 
   const filteredUsers = computed(() => {
-    const searchQuery = search.value.trim().toLowerCase()
+    const searchQuery = debouncedSearch.value.trim().toLowerCase()
 
     return users.filter((user) => {
       const matchesRole = role.value === null || user.role === role.value
@@ -41,6 +39,21 @@ export function useUsersTable(users: readonly User[]) {
       return matchesRole && matchesSearch
     })
   })
+
+  watch(debouncedSearch, (value) => {
+    if (value !== queryState.value.search) {
+      updateQuery({ search: value, page: 1 }, true)
+    }
+  })
+
+  watch(
+    () => queryState.value.search,
+    (value) => {
+      if (value !== search.value) {
+        search.value = value
+      }
+    }
+  )
 
   // sorting
   const sortBy = computed(() => queryState.value.sortBy)
