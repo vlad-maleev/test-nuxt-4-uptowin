@@ -1,5 +1,5 @@
 <template>
-  <div class="max-h-[520px] overflow-auto">
+  <div class="max-h-[60vh] overflow-auto sm:max-h-[520px]">
     <table class="w-full min-w-[760px] text-left text-sm">
       <thead
         class="sticky top-0 z-10 bg-slate-100 text-xs tracking-wide text-slate-500 uppercase dark:bg-slate-800 dark:text-slate-400"
@@ -8,14 +8,22 @@
           <th class="px-6 py-4 font-semibold">User</th>
           <th class="px-4 py-4 font-semibold">Email</th>
           <th class="px-4 py-4 font-semibold">
-            <button class="sort-button" type="button" @click="$emit('sort', 'age')">
+            <button
+              class="sort-button hover:text-slate-900 dark:hover:text-slate-100"
+              type="button"
+              @click="$emit('sort', 'age')"
+            >
               Age
               <component :is="sortIcon('age')" class="size-4" aria-hidden="true" />
             </button>
           </th>
           <th class="px-4 py-4 font-semibold">Role</th>
           <th class="px-6 py-4 font-semibold">
-            <button class="sort-button" type="button" @click="$emit('sort', 'createdAt')">
+            <button
+              class="sort-button hover:text-slate-900 dark:hover:text-slate-100"
+              type="button"
+              @click="$emit('sort', 'createdAt')"
+            >
               Created
               <component :is="sortIcon('createdAt')" class="size-4" aria-hidden="true" />
             </button>
@@ -122,11 +130,4 @@ function sortIcon(field: UserSortField) {
   transition: color 150ms ease;
 }
 
-.sort-button:hover {
-  color: #0f172a;
-}
-
-:global(.dark) .sort-button:hover {
-  color: #f8fafc;
-}
 </style>
