@@ -9,7 +9,7 @@
           <th class="px-4 py-4 font-semibold">Email</th>
           <th class="px-4 py-4 font-semibold">
             <button
-              class="sort-button hover:text-slate-900 dark:hover:text-slate-100"
+              class="inline-flex cursor-pointer items-center gap-1.5 transition-colors hover:text-slate-900 dark:hover:text-slate-100"
               type="button"
               @click="$emit('sort', 'age')"
             >
@@ -20,7 +20,7 @@
           <th class="px-4 py-4 font-semibold">Role</th>
           <th class="px-6 py-4 font-semibold">
             <button
-              class="sort-button hover:text-slate-900 dark:hover:text-slate-100"
+              class="inline-flex cursor-pointer items-center gap-1.5 transition-colors hover:text-slate-900 dark:hover:text-slate-100"
               type="button"
               @click="$emit('sort', 'createdAt')"
             >
@@ -120,14 +120,3 @@ function sortIcon(field: UserSortField) {
   return props.sortDirection === 'asc' ? ArrowUp : ArrowDown
 }
 </script>
-
-<style scoped>
-.sort-button {
-  display: inline-flex;
-  cursor: pointer;
-  align-items: center;
-  gap: 0.375rem;
-  transition: color 150ms ease;
-}
-
-</style>
