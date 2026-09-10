@@ -4,6 +4,11 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineNuxtConfig({
   modules: ['@nuxt/eslint', '@nuxtjs/color-mode'],
   devtools: { enabled: true },
+  app: {
+    head: {
+      title: 'Test Nuxt 4 UpToWin'
+    }
+  },
   css: ['~/assets/css/main.css'],
   compatibilityDate: '2025-07-15',
   vite: {
