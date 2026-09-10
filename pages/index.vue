@@ -48,24 +48,14 @@
               Page {{ page }} of {{ totalPages }}
             </span>
             <div class="flex gap-2">
-              <button
-                class="pagination-button"
-                type="button"
-                :disabled="page === 1"
-                @click="page--"
-              >
-                <ChevronLeft class="size-4" aria-hidden="true" />
+              <BaseButton :disabled="page === 1" @click="page--">
+                <ChevronLeft class="size-4 translate-y-px" aria-hidden="true" />
                 Previous
-              </button>
-              <button
-                class="pagination-button"
-                type="button"
-                :disabled="page === totalPages"
-                @click="page++"
-              >
+              </BaseButton>
+              <BaseButton :disabled="page === totalPages" @click="page++">
                 Next
-                <ChevronRight class="size-4" aria-hidden="true" />
-              </button>
+                <ChevronRight class="size-4 translate-y-px" aria-hidden="true" />
+              </BaseButton>
             </div>
           </div>
         </footer>
@@ -97,43 +87,3 @@ const rangeStart = computed(() =>
 )
 const rangeEnd = computed(() => Math.min(page.value * perPage.value, filteredUsers.value.length))
 </script>
-
-<style scoped>
-.pagination-button {
-  display: inline-flex;
-  cursor: pointer;
-  align-items: center;
-  gap: 0.375rem;
-  border: 1px solid #cbd5e1;
-  border-radius: 0.5rem;
-  padding: 0.5rem 0.75rem;
-  background: white;
-  color: #334155;
-  font-size: 0.875rem;
-  font-weight: 500;
-  transition:
-    border-color 150ms ease,
-    background-color 150ms ease;
-}
-
-.pagination-button:hover:not(:disabled) {
-  border-color: #94a3b8;
-  background: #f8fafc;
-}
-
-.pagination-button:disabled {
-  cursor: not-allowed;
-  opacity: 0.45;
-}
-
-:global(.dark) .pagination-button {
-  border-color: #475569;
-  background: #0f172a;
-  color: #cbd5e1;
-}
-
-:global(.dark) .pagination-button:hover:not(:disabled) {
-  border-color: #64748b;
-  background: #1e293b;
-}
-</style>
