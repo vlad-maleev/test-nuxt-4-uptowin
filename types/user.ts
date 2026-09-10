@@ -6,6 +6,15 @@ export type PageSize = (typeof PAGE_SIZES)[number]
 export type UserSortField = 'age' | 'createdAt'
 export type SortDirection = 'asc' | 'desc'
 
+export interface UsersTableState {
+  search: string
+  role: UserRole | null
+  sortBy: UserSortField | null
+  sortDirection: SortDirection
+  page: number
+  perPage: PageSize
+}
+
 export interface User {
   id: number
   name: string

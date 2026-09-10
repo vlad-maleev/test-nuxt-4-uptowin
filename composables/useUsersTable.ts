@@ -1,9 +1,32 @@
-import type { PageSize, SortDirection, User, UserRole, UserSortField } from '~/types/user'
+import type { SortDirection, UsersTableState, User, UserRole, UserSortField } from '~/types/user'
+import { parseUsersTableQuery, serializeUsersTableQuery } from '~/utils/usersTableQuery'
 
 export function useUsersTable(users: readonly User[]) {
+  const route = useRoute()
+  const router = useRouter()
+  const queryState = computed(() => parseUsersTableQuery(route.query))
+
+  function updateQuery(patch: Partial<UsersTableState>, replace = false) {
+    const state = { ...queryState.value, ...patch }
+    const query = serializeUsersTableQuery(state)
+
+    if (replace) {
+      void router.replace({ query })
+    } else {
+      void router.push({ query })
+    }
+  }
+
   // filters
-  const search = ref('')
-  const role = ref<UserRole | null>(null)
+  const search = computed({
+    get: () => queryState.value.search,
+    set: (value: string) => updateQuery({ search: value, page: 1 }, true)
+  })
+
+  const role = computed({
+    get: () => queryState.value.role,
+    set: (value: UserRole | null) => updateQuery({ role: value, page: 1 })
+  })
 
   const filteredUsers = computed(() => {
     const searchQuery = search.value.trim().toLowerCase()
@@ -20,8 +43,8 @@ export function useUsersTable(users: readonly User[]) {
   })
 
   // sorting
-  const sortBy = ref<UserSortField | null>(null)
-  const sortDirection = ref<SortDirection>('asc')
+  const sortBy = computed(() => queryState.value.sortBy)
+  const sortDirection = computed(() => queryState.value.sortDirection)
 
   const sortedUsers = computed(() => {
     if (sortBy.value === null) {
@@ -40,22 +63,35 @@ export function useUsersTable(users: readonly User[]) {
     })
   })
 
+  function toggleSort(field: UserSortField) {
+    const direction: SortDirection =
+      sortBy.value === field && sortDirection.value === 'asc' ? 'desc' : 'asc'
+
+    updateQuery({ sortBy: field, sortDirection: direction, page: 1 })
+  }
+
   // pagination
-  const page = ref(1)
-  const perPage = ref<PageSize>(10)
+  const perPage = computed({
+    get: () => queryState.value.perPage,
+    set: (value: UsersTableState['perPage']) => updateQuery({ perPage: value, page: 1 })
+  })
 
   const totalPages = computed(() =>
     Math.max(1, Math.ceil(sortedUsers.value.length / perPage.value))
   )
 
+  const page = computed({
+    get: () => Math.min(queryState.value.page, totalPages.value),
+    set: (value: number) => {
+      const nextPage = Math.min(Math.max(value, 1), totalPages.value)
+      updateQuery({ page: nextPage })
+    }
+  })
+
   const paginatedUsers = computed(() => {
     const start = (page.value - 1) * perPage.value
 
     return sortedUsers.value.slice(start, start + perPage.value)
-  })
-
-  watch([search, role, perPage], () => {
-    page.value = 1
   })
 
   return {
@@ -65,10 +101,10 @@ export function useUsersTable(users: readonly User[]) {
     sortDirection,
     page,
     perPage,
-
     filteredUsers,
     sortedUsers,
     paginatedUsers,
-    totalPages
+    totalPages,
+    toggleSort
   }
 }
